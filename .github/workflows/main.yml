@@ -1,17 +1,7 @@
 name: Building kernel
 run-name: "Building kernel (${{ inputs.KBRANCH }}) #${{ github.run_number }}"
 
-on: # [push]
-#  release:
-#    types: [published]
-#  push:
-#    branches:
-#      - master
-#    paths:
-#      - '.config'
-#  schedule:
-#    - cron: 0 8 * * 5
-# Allows you to run this workflow manually from the Actions tab
+on:
   workflow_dispatch:
     inputs:
       COMPILER:
@@ -21,11 +11,11 @@ on: # [push]
       KREPO:
         description: 'Kernel repo URL'
         required: true
-        default: 'https://github.com/Revive-Selene/android_kernel_xiaomi_selene'
+        default: 'https://github.com/garnet-universe/kernel_xiaomi_garnet'
       KBRANCH:
         description: 'Kernel branch'
         required: true
-        default: '4.14'
+        default: 'bka'
       KSU:
         description: 'KSU patch script to run (e.g. applyPatches.sh, applyPatches-ksun.sh, or leave blank for no KSU)'
         required: false
@@ -82,8 +72,8 @@ jobs:
             dnf group install development-tools -y
             dnf install llvm lld bc bison ca-certificates curl flex glibc-devel.i686 glibc-devel binutils-devel openssl python3 python2 zstd clang gcc-arm-linux-gnu dtc libxml2 libarchive openssl-devel perl tomsfastmath-devel wget xz -y
             ln -sf "/usr/bin/python3" /usr/bin/python
-            git config --global user.name "Revive-Selene"
-            git config --global user.email "revive-selene@github.com"
+            git config --global user.name "garnet-universe"
+            git config --global user.email "garnet-universe@github.com"
 
         - name: show host info
           run: |
