@@ -14,7 +14,7 @@ export KBUILD_BUILD_HOST="github-actions"
 
 # Multi-Defconfig for GKI 5.10 (SM7435)
 # Order matters: later configs override earlier ones
-export DEFCONFIGS="gki_defconfig vendor/garnet_GKI.config"
+export DEFCONFIGS="gki_defconfig arch/arm64/configs/vendor/garnet_GKI.config"
 export defconfig="garnet_GKI.config"
 
 if [[ -z "$zipper_repo" ]]; then

@@ -20,13 +20,15 @@ case $1 in
   "build" )
     export PATH="${dir}/bin:/usr/bin:${PATH}"
 
-    # Multi-Defconfig: apply each config in order (later configs override earlier)
-    for defconfig_file in ${DEFCONFIGS}; do
-      make "${defconfig_file}" O=out ARCH=arm64 SUBARCH=arm64 CC=clang LD=ld.lld
-    done
+    # Multi-Defconfig: merge configs using kernel's merge_config.sh
+    # Base config first, then fragment configs override
+    make "${DEFCONFIGS%% *}" O=out ARCH=arm64 SUBARCH=arm64 CC=clang LD=ld.lld
+    scripts/kconfig/merge_config.sh -O out out/.config ${DEFCONFIGS#* }
+    make O=out olddefconfig
 
     # Build uncompressed Image
     make -j$NJOBS O=out \
+      KCFLAGS="-Wno-error" \
       CROSS_COMPILE="aarch64-linux-gnu-" \
       CROSS_COMPILE_ARM32="arm-linux-gnueabi-" \
       CROSS_COMPILE_COMPAT="arm-linux-gnueabi-" \

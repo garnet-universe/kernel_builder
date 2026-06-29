@@ -7,7 +7,7 @@ on:
       COMPILER:
         description: 'Compiler to use'
         required: true
-        default: 'shattered-Clang-15'
+        default: 'Neutron-Clang'
       KREPO:
         description: 'Kernel repo URL'
         required: true
