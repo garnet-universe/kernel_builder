@@ -19,7 +19,13 @@ case $1 in
 
   "build" )
     export PATH="${dir}/bin:/usr/bin:${PATH}"
-    make -j$NJOBS O=out CC=clang LD=ld.lld ARCH=arm64 SUBARCH=arm64 $2
+
+    # Multi-Defconfig: apply each config in order (later configs override earlier)
+    for defconfig_file in ${DEFCONFIGS}; do
+      make "${defconfig_file}" O=out ARCH=arm64 SUBARCH=arm64 CC=clang LD=ld.lld
+    done
+
+    # Build uncompressed Image
     make -j$NJOBS O=out \
       CROSS_COMPILE="aarch64-linux-gnu-" \
       CROSS_COMPILE_ARM32="arm-linux-gnueabi-" \
@@ -37,6 +43,7 @@ case $1 in
       HOSTCXX=clang++ \
       HOSTLD=ld.lld \
       HOSTAR=llvm-ar \
+      Image \
       2>&1 | tee ${CUR_TOOLCHAIN}.log
     sh ${outside}/ver_toolchain.sh clang ld.lld > ${CUR_TOOLCHAIN}.info
   ;;
